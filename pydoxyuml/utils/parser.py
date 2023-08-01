@@ -1,6 +1,8 @@
 from argparse import ArgumentParser
 import argparse
 
+"""Module provides all functions to setup an ArgumentParser"""
+
 
 def setup_parser_generate_docs(parser: ArgumentParser) -> ArgumentParser:
     """setup parser for generate-docs command
@@ -21,13 +23,15 @@ def setup_parser_generate_docs(parser: ArgumentParser) -> ArgumentParser:
     parser.add_argument(
         "--output",
         type=str,
-        help="Relative path to directory where you want to save your documentation with folders 'html/', 'latex/', ...",
+        help="Relative path to directory where you want to save your \
+            documentation with folders 'html/', 'latex/', ...",
         required=True,
     )
     parser.add_argument(
         "--doxyfile",
         type=str,
-        help="Path to Doxyfile. Is required if the corresponding Doxyfile is not in the current directory.",
+        help="Path to Doxyfile. Is required if the corresponding Doxyfile is \
+            not in the current directory.",
     )
     parser.add_argument(
         "--title",
@@ -61,13 +65,15 @@ def setup_parser_generate_uml(parser: ArgumentParser) -> ArgumentParser:
         "--output",
         type=str,
         default="uml",
-        help="Relative path to directory where you want to save your documentation with folder 'uml/'",
+        help="Relative path to directory where you want to save your documentation \
+            with folder 'uml/'",
     )
     parser.add_argument(
         "--recursion-depth",
         type=int,
         default=1,
-        help="how deep the algorithm will go to discover local parent directories for generating UML diagrams.",
+        help="how deep the algorithm will go to discover local parent directories \
+            for generating UML diagrams.",
     )
     parser.add_argument(
         "--format",

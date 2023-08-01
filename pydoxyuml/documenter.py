@@ -3,8 +3,20 @@ import logging
 import os
 from typing import Any, List
 
+"""Module provides a base abstract class for a documenter
+"""
+
 
 class Documenter(ABC):
+    """abstract class for a documenter
+
+    provides common functionalities such as:
+     - _create_directory
+     - _create_directories
+     - _execute_command
+
+    """
+
     def __init__(self, input: List[str], output: str) -> None:
         super().__init__()
 
@@ -13,11 +25,12 @@ class Documenter(ABC):
         self._input = input
         """List[str]: list of input module root directories"""
         self._output = self._current_dir + output.rstrip("/") + "/"
-        """str: absolute path to directory where to store documentation. Format <path_to_directory>/"""
+        """str: absolute path to directory where to store documentation.
+        Format <path_to_directory>/"""
 
     @abstractmethod
     def __call__(self, *args: Any, **kwds: Any) -> Any:
-        return super().__call__(*args, **kwds)
+        pass
 
     def _create_directory(self, directory: str):
         """creates output directory"""
@@ -45,5 +58,10 @@ class Documenter(ABC):
 
     @staticmethod
     def _execute_command(command: str):
+        """executes given command on hostsystem
+
+        Args:
+            command (str): command in string format like: 'cd ~'
+        """
         logging.debug(command)
         os.system(command)

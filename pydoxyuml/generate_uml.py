@@ -6,23 +6,8 @@ from typing import Any, Iterable, Iterator, List
 
 from pydoxyuml.documenter import Documenter
 
-
-def setup_parser(parser: ArgumentParser) -> ArgumentParser:
-    parser.add_argument(
-        "--recursion-level",
-        type=int,
-        default=3,
-        help="how deep the algorithm will go to discover local parent directories",
-    )
-
-    parser.add_argument(
-        "module_dirs",
-        nargs="+",
-        type=str,
-        help="paths to modules you want to create the uml diagrams from",
-    )
-
-    return parser
+"""Module Provides functions and classes for a UML diagram documenter
+"""
 
 
 def unpack(s):
@@ -65,25 +50,23 @@ def convert_to_file_path(import_str: str) -> str:
     return import_str.replace(".", "/").rstrip(".") + ".py"
 
 
-"""
 # BASE IMPORT COLLECTOR
-def get_imports(file_path: str) -> List[str]:
-    with open(file_path, "r", encoding="utf-8") as file:
-        tree = ast.parse(file.read(), file_path)
-
-    imports = []
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Import):
-            for name in node.names:
-                imports.append(name.name)
-        if isinstance(node, ast.ImportFrom):
-            module = node.module if node.module else ""
-            for name in node.names:
-                module_str = f"{module}.{name.name}"
-                module_str = module_str.lstrip(".")
-                imports.append(module_str)
-    return imports
-"""
+# def get_imports(file_path: str) -> List[str]:
+#     with open(file_path, "r", encoding="utf-8") as file:
+#         tree = ast.parse(file.read(), file_path)
+#
+#     imports = []
+#     for node in ast.walk(tree):
+#         if isinstance(node, ast.Import):
+#             for name in node.names:
+#                 imports.append(name.name)
+#         if isinstance(node, ast.ImportFrom):
+#             module = node.module if node.module else ""
+#             for name in node.names:
+#                 module_str = f"{module}.{name.name}"
+#                 module_str = module_str.lstrip(".")
+#                 imports.append(module_str)
+#     return imports
 
 
 class LocalImportFilter:
@@ -94,10 +77,19 @@ class LocalImportFilter:
         """List[str]: path to local directories"""
 
     def __call__(self, import_str: str) -> bool:
+        """decides if a given import string imports from a local directory or not
+
+        Args:
+            import_str (str): import string from python file like 'numpy' from 'import numpy'
+
+        Returns:
+            bool: True if first element of import string is local
+        """
         dir = import_str.split(".")[0]
         return dir in self.local_directories
 
     def __str__(self) -> str:
+        """returns all local directories"""
         return unpack(self.local_directories)
 
     @staticmethod
@@ -114,6 +106,8 @@ class LocalImportFilter:
 
 
 class UMLDocumenter(Documenter):
+    """Generates UML Diagrams on call"""
+
     def __init__(
         self,
         input: Iterable[str],
@@ -129,22 +123,35 @@ class UMLDocumenter(Documenter):
         self._recursion_depth = recursion_depth
         self._imports = []
 
-    def __call__(self, *args: Any, **kwds: Any) -> Any:
+    def __call__(self, *args: Any, **kwds: Any) -> None:
+        """generates UML diagrams"""
         self._create_directory(self._output)
         for module_path in self._input:
             imports = self._get_imports_from_submodules(module_path)
             self._imports.extend(imports)
             project_name = module_path.rstrip("/").replace("/", "_")
-            command = self._generate_command(project_name, imports)
+            command = self._generate_pyreverse_command(project_name, imports)
             self._execute_command(command)
 
         # if there are multiple modules given -> create a complete UML diagram
         if len(self._input) > 1:
-            command = self._generate_command("complete", self._imports)
+            command = self._generate_pyreverse_command("complete", self._imports)
             self._execute_command(command)
 
-    def _generate_command(self, project_name: str, imports: Iterable[str]) -> str:
-        command = f"pyreverse -o {self._format} -p {project_name} -d {self._output} {unpack(imports)}"
+    def _generate_pyreverse_command(
+        self, project_name: str, imports: Iterable[str]
+    ) -> str:
+        """generates pyreverse command and fills arguments into command
+
+        Args:
+            project_name (str): hoy the project is called
+            imports (Iterable[str]): which files to include into UML diagram
+
+        Returns:
+            str: build pyreverse command
+        """
+        command = f"pyreverse -o {self._format} -p {project_name} -d {self._output} \
+            {unpack(imports)}"
         if self._colorized:
             command += " --colorized"
         return command
@@ -156,7 +163,8 @@ class UMLDocumenter(Documenter):
             module_path (str): root directory
 
         Returns:
-            Iterable[str]: all files imported by the root directory until recursion depth is reached
+            Iterable[str]: all files imported by the root directory until
+                recursion depth is reached
         """
         imports = []
         for sub_module_path in find_submodules(module_path):
@@ -170,7 +178,9 @@ class UMLDocumenter(Documenter):
     def _get_recursive_imports(
         self, python_file_name: str, recursion_level: int
     ) -> Iterable[str]:
-        """get all local python files imported by python_file_name until recursion_level == 0 is reached
+        """get all local python files imported by python_file_name
+
+        stops if recursion_level == 0 is reached
 
         Args:
             python_file_name (str): python file to inspect
@@ -215,12 +225,3 @@ class UMLDocumenter(Documenter):
         # filter for empty lists
         imports = list(filter(lambda x: len(x) > 0, imports))
         return imports
-
-
-if __name__ == "__main__":
-    parser = setup_parser(ArgumentParser())
-    args = parser.parse_args()
-
-    UMLDocumenter(**vars(args))()
-
-    # main(args.module_dirs)

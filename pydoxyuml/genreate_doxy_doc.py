@@ -40,17 +40,33 @@ class DoxyDocumenter(Documenter):
         self._generate_documentation()
         # self._cleanup()
 
-    def _load_doxyfile(self, doxyfile: Union[None, str]):
+    def _load_doxyfile(self, doxyfile: Union[None, str]) -> List[str]:
+        """loads Doxyfile form filesystem as txt file
+
+        Args:
+            doxyfile (Union[None, str]): path to Doxyfile.
+                If None -> use the default Doxyfile installed with this package
+
+        Returns:
+            List[str]: lines from Doxyfile
+        """
         if doxyfile is None:
-            return self._load_text_file(
-                pkg_resources.resource_filename("pydoxyuml", "Doxyfile")
-            )
+            path = pkg_resources.resource_filename("pydoxyuml", "Doxyfile")
         else:
-            return self._load_text_file(doxyfile)
+            path = doxyfile
+        return self._load_text_file(path)
 
     @staticmethod
     def _load_text_file(path: str) -> List[str]:
-        with open(path, "r") as file:
+        """loads text file from file system
+
+        Args:
+            path (str): path to text file
+
+        Returns:
+            List[str]: individual lines of text file
+        """
+        with open(path, "r", encoding="UTF-8") as file:
             lines = file.readlines()
         return lines
 
@@ -62,14 +78,15 @@ class DoxyDocumenter(Documenter):
             path (str): where to write the text file
             content (str):
         """
-        with open(path, "w") as file:
+        with open(path, "w", encoding="UTF-8") as file:
             file.writelines(content)
 
     def _call_doxypypy(self, python_files: List[str]):
         """call doxypypy on a given list of files to copy in self._output/tmp directory
 
         Args:
-            python_files (List[str]): list of python files to apply to doxypypy on and add into self._output/tmp directory
+            python_files (List[str]): list of python files to apply to doxypypy on and
+                add into self._output/tmp directory
         """
         for python_file in python_files:
             command = f"doxypypy -a -c {python_file} > {self._tmp_dir+python_file.lstrip('../')}"
@@ -141,12 +158,11 @@ class DoxyDocumenter(Documenter):
         return line
 
     def _generate_documentation(self):
-        # command = f"export INCLUDE={self._tmp_dir}"
-        # self._execute_command(command)
+        """generate doxygen command and execute it on hostsystem"""
         command = f"doxygen {self._output +'Doxyfile'}"
         self._execute_command(command)
 
     def _cleanup(self):
-        # remove self._tmp directory
+        """remove temporary directory from filesystem"""
         command = f"rm -r {self._tmp_dir}"
         self._execute_command(command)

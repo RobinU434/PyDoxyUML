@@ -1,5 +1,7 @@
 import logging
 
+"""Module provides all functions for log handling"""
+
 
 def set_log_level(log_level: str):
     """sets log level

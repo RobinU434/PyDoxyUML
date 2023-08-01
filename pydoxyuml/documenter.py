@@ -8,10 +8,12 @@ class Documenter(ABC):
     def __init__(self, input: List[str], output: str) -> None:
         super().__init__()
 
+        self._current_dir = os.getcwd().rstrip("/") + "/"
+        """str: absolute path to where the module was called"""
         self._input = input
         """List[str]: list of input module root directories"""
-        self._output = output.rstrip("/") + "/"
-        """str: directory where to store documentation. Format <directory>/"""
+        self._output = self._current_dir + output.rstrip("/") + "/"
+        """str: absolute path to directory where to store documentation. Format <path_to_directory>/"""
 
     @abstractmethod
     def __call__(self, *args: Any, **kwds: Any) -> Any:

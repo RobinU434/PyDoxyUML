@@ -27,14 +27,18 @@ class DoxyDocumenter(Documenter):
                 module_path.rstrip("/") + "/**/*.py", recursive=True
             )
             directories = set(
-                map(lambda x: self._tmp_dir + "/".join(x.split("/")[:-1]), python_files)
+                map(
+                    lambda x: self._tmp_dir
+                    + ("/".join(x.split("/")[:-1]).lstrip("../")),
+                    python_files,
+                )
             )
             self._create_directories(directories)
             self._call_doxypypy(python_files)
 
         self._alter_doxyfile()
         self._generate_documentation()
-        self._cleanup()
+        # self._cleanup()
 
     def _load_doxyfile(self, doxyfile: Union[None, str]):
         if doxyfile is None:
@@ -68,7 +72,7 @@ class DoxyDocumenter(Documenter):
             python_files (List[str]): list of python files to apply to doxypypy on and add into self._output/tmp directory
         """
         for python_file in python_files:
-            command = f"doxypypy -a -c {python_file} > {self._tmp_dir+python_file}"
+            command = f"doxypypy -a -c {python_file} > {self._tmp_dir+python_file.lstrip('../')}"
             self._execute_command(command)
 
     def _alter_doxyfile(self):
@@ -85,16 +89,23 @@ class DoxyDocumenter(Documenter):
         index_to_remove = []
         for line_idx in range(len(self._doxyfile)):
             # alter title
-            if input_str in self._doxyfile[line_idx]:
+            if (
+                input_str in self._doxyfile[line_idx]
+                and self._tmp_dir not in self._doxyfile[line_idx]
+            ):
                 self._doxyfile[line_idx] = self._add_doxy_content(
                     self._doxyfile[line_idx], f" {self._tmp_dir}"
                 )
+                print(self._doxyfile[line_idx])
                 logging.debug("altered input directory")
             # alter title to custom
             elif title_str in self._doxyfile[line_idx]:
                 self._doxyfile[line_idx].replace("Example Project", self._title)
                 logging.debug("altered title")
-            elif output_str in self._doxyfile[line_idx]:
+            elif (
+                output_str in self._doxyfile[line_idx]
+                and output_str not in self._doxyfile[line_idx]
+            ):
                 self._doxyfile[line_idx] = self._add_doxy_content(
                     self._doxyfile[line_idx], f" {self._output}"
                 )

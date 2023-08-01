@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+import argparse
 
 
 def setup_parser_generate_docs(parser: ArgumentParser) -> ArgumentParser:
@@ -26,7 +27,6 @@ def setup_parser_generate_docs(parser: ArgumentParser) -> ArgumentParser:
     parser.add_argument(
         "--doxyfile",
         type=str,
-        default="Doxyfile",
         help="Path to Doxyfile. Is required if the corresponding Doxyfile is not in the current directory.",
     )
     parser.add_argument(
@@ -34,6 +34,9 @@ def setup_parser_generate_docs(parser: ArgumentParser) -> ArgumentParser:
         type=str,
         default="Example Project",
         help="Title for project you want to document.",
+    )
+    parser.add_argument(
+        "--style-sheet", type=str, help="Absolute path to html style sheet."
     )
     return parser
 
@@ -92,12 +95,16 @@ def setup_parser(parser: ArgumentParser) -> ArgumentParser:
     """
     sub_parser = parser.add_subparsers(dest="command", title="command")
     parser_generate_docs = sub_parser.add_parser(
-        "generate-docs", help="Generate Doxygen-style documentation"
+        "generate-docs",
+        help="Generate Doxygen-style documentation",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser_generate_docs = setup_parser_generate_docs(parser_generate_docs)
 
     parser_generate_uml = sub_parser.add_parser(
-        "generate-uml", help="Generate UML diagrams"
+        "generate-uml",
+        help="Generate UML diagrams",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser_generate_uml = setup_parser_generate_uml(parser_generate_uml)
 

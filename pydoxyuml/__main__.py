@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+import argparse
 
 from pydoxyuml.generate_uml import UMLDocumenter
 from pydoxyuml.genreate_doxy_doc import DoxyDocumenter
@@ -8,7 +9,7 @@ from pydoxyuml.utils.parser import setup_parser
 
 def main():
     parser = ArgumentParser(
-        description="PyDoxyUML - Collect Python code documentation and generate Doxygen docs + UML diagrams"
+        description="PyDoxyUML - Collect Python code documentation and generate Doxygen docs + UML diagrams",
     )
     parser = setup_parser(parser)
 

@@ -16,6 +16,9 @@ setup(
         ],
     },
     install_requires=requirements,
+    package_data={
+        "pydoxyuml": ["Doxyfile"],
+    },
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",

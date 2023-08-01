@@ -1,22 +1,20 @@
 import glob
 import logging
-from typing import Any, List
-
+from typing import Any, List, Union
+import pkg_resources
 from pydoxyuml.documenter import Documenter
 
 
 class DoxyDocumenter(Documenter):
     def __init__(
-        self,
-        input: List[str],
-        output: str,
-        doxyfile: str,
-        title: str,
+        self, input: List[str], output: str, doxyfile: str, title: str, style_sheet: str
     ) -> None:
         super().__init__(input, output)
-        self._doxyfile = doxyfile
+        self._doxyfile = self._load_doxyfile(doxyfile)
+        """List[str]: variable contains content of doxyfile"""
         self._tmp_dir = self._output + "tmp/"
         self._title = title
+        self._style_sheet_path = style_sheet
 
     def __call__(self, *args: Any, **kwds: Any) -> Any:
         self._create_directory(self._output)
@@ -34,10 +32,17 @@ class DoxyDocumenter(Documenter):
             self._create_directories(directories)
             self._call_doxypypy(python_files)
 
-        self._copy(self._doxyfile, self._output + "Doxyfile")
         self._alter_doxyfile()
         self._generate_documentation()
         self._cleanup()
+
+    def _load_doxyfile(self, doxyfile: Union[None, str]):
+        if doxyfile is None:
+            return self._load_text_file(
+                pkg_resources.resource_filename("pydoxyuml", "Doxyfile")
+            )
+        else:
+            return self._load_text_file(doxyfile)
 
     @staticmethod
     def _load_text_file(path: str) -> List[str]:
@@ -72,31 +77,41 @@ class DoxyDocumenter(Documenter):
         - INPUT
         - OUTPUT_DIRECTORY
         """
-        doxy_content = self._load_text_file(self._doxyfile)
-
         title_str = "PROJECT_NAME           = Example Project"
         input_str = "INPUT                  ="
         output_str = "OUTPUT_DIRECTORY       ="
         # TODO: insert HTML Style sheet
         html_style_sheet_str = "HTML_EXTRA_STYLESHEET  ="
-        for line_idx in range(len(doxy_content)):
+        index_to_remove = []
+        for line_idx in range(len(self._doxyfile)):
             # alter title
-            if input_str in doxy_content[line_idx]:
-                doxy_content[line_idx] = self._add_doxy_content(
-                    doxy_content[line_idx], f" {self._tmp_dir}"
+            if input_str in self._doxyfile[line_idx]:
+                self._doxyfile[line_idx] = self._add_doxy_content(
+                    self._doxyfile[line_idx], f" {self._tmp_dir}"
                 )
                 logging.debug("altered input directory")
             # alter title to custom
-            elif title_str in doxy_content[line_idx]:
-                doxy_content[line_idx].replace("Example Project", self._title)
+            elif title_str in self._doxyfile[line_idx]:
+                self._doxyfile[line_idx].replace("Example Project", self._title)
                 logging.debug("altered title")
-            elif output_str in doxy_content[line_idx]:
-                doxy_content[line_idx] = self._add_doxy_content(
-                    doxy_content[line_idx], f" {self._output}"
+            elif output_str in self._doxyfile[line_idx]:
+                self._doxyfile[line_idx] = self._add_doxy_content(
+                    self._doxyfile[line_idx], f" {self._output}"
                 )
                 logging.debug("altered output directory")
+            elif html_style_sheet_str in self._doxyfile[line_idx]:
+                if self._style_sheet_path is None:
+                    index_to_remove.append(line_idx)
+                else:
+                    self._doxyfile[line_idx] = self._add_doxy_content(
+                        self._doxyfile[line_idx], self._style_sheet_path
+                    )
 
-        self._write_text_file(self._output + "Doxyfile", doxy_content)
+        # remove indices
+        for index in index_to_remove[::-1]:
+            self._doxyfile.pop(index)
+
+        self._write_text_file(self._output + "Doxyfile", self._doxyfile)
 
     @staticmethod
     def _add_doxy_content(line: str, content: str) -> str:

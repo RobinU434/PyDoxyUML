@@ -23,7 +23,7 @@ Before installing PyDoxyUML, make sure you have the following system-level packa
    sudo apt-get install doxygen
    ```
 
-For visualization you will need graphviz
+    For visualization you will need graphviz
 
    ```bash
    sudo apt install graphviz

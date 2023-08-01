@@ -23,11 +23,23 @@ Before installing PyDoxyUML, make sure you have the following system-level packa
    sudo apt-get install doxygen
    ```
 
+For visualization you will need graphviz
+
+   ```bash
+   sudo apt install graphviz
+   ```
+
 2. **doxypypy**: Doxypypy is a Python module that converts Python docstrings to Doxygen-compatible comments. Install it using `pip`:
 
    ```bash
    sudo apt install python3-doxypypy
    ```
+
+3. **TexLive**: (Optional) Install TexLive for latex generated output
+
+    ```bash
+    sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
+    ```
 
 ### PyDoxyUML Package
 

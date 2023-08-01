@@ -1,6 +1,6 @@
 # PyDoxyUML
 
-PyDoxyUML is a Python package that collects Python code documentation and creates Doxygen-style documentation, along with generating Unified Modeling Language (UML) diagrams.
+PyDoxyUML is a Python package that collects Python code documentation (in google template) and creates Doxygen-style documentation, along with generating Unified Modeling Language (UML) diagrams.
 
 ## Features
 

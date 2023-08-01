@@ -1,10 +1,9 @@
+"""Module provides a base abstract class for a documenter"""
 from abc import ABC, abstractmethod
 import logging
 import os
 from typing import Any, List
 
-"""Module provides a base abstract class for a documenter
-"""
 
 
 class Documenter(ABC):

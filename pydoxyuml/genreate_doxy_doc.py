@@ -1,3 +1,6 @@
+"""Module provides a class to generate Doxygen documentation
+based on google templated python code"""
+
 import glob
 import logging
 from typing import Any, List, Union
@@ -6,6 +9,8 @@ from pydoxyuml.documenter import Documenter
 
 
 class DoxyDocumenter(Documenter):
+    """Class to document code in doxygen"""
+
     def __init__(
         self, input: List[str], output: str, doxyfile: str, title: str, style_sheet: str
     ) -> None:

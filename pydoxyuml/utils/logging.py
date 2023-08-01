@@ -1,6 +1,6 @@
-import logging
-
 """Module provides all functions for log handling"""
+
+import logging
 
 
 def set_log_level(log_level: str):

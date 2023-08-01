@@ -1,16 +1,14 @@
-from argparse import ArgumentParser
+"""Module Provides functions and classes for a UML diagram documenter"""
 import ast
 import glob
 import os
-from typing import Any, Iterable, Iterator, List
+from typing import Any, Iterable, List
 
 from pydoxyuml.documenter import Documenter
 
-"""Module Provides functions and classes for a UML diagram documenter
-"""
 
 
-def unpack(s):
+def unpack(str_list: Iterable[str]) -> str:
     """converts list into a string with ' ' as separator and without brackets
 
     Args:
@@ -19,7 +17,7 @@ def unpack(s):
     Returns:
         str: list in str format
     """
-    return " ".join(map(str, s))
+    return " ".join(map(str, str_list))
 
 
 def find_submodules(root_directory: str) -> List[str]:
@@ -204,7 +202,6 @@ class UMLDocumenter(Documenter):
                     self._local_dir_filter, map(lambda x: x.name, node.names)
                 )
                 local_files = map(lambda x: convert_to_file_path(x), local_imports)
-                # TODO: not tested feature
                 imports.extend(
                     list(
                         map(

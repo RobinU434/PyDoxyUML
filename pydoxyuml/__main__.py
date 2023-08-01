@@ -1,11 +1,3 @@
-from argparse import ArgumentParser
-import sys
-
-from pydoxyuml.generate_uml import UMLDocumenter
-from pydoxyuml.genreate_doxy_doc import DoxyDocumenter
-from pydoxyuml.utils.logging import set_log_level
-from pydoxyuml.utils.parser import setup_parser
-
 """PyDoxyUML - Collect Python code documentation and generate Doxygen docs + UML diagrams
 
 Either to create doxygen documentation
@@ -15,6 +7,14 @@ Or to create UML diagrams
 pydoxyuml generate-uml --input ./my_project --output ./uml_diagrams
 
 """
+
+from argparse import ArgumentParser
+import sys
+
+from pydoxyuml.generate_uml import UMLDocumenter
+from pydoxyuml.genreate_doxy_doc import DoxyDocumenter
+from pydoxyuml.utils.logging import set_log_level
+from pydoxyuml.utils.parser import setup_parser
 
 
 def main():

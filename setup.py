@@ -1,6 +1,8 @@
+"""Module provides function install package"""
+
+
 from setuptools import setup, find_packages
 
-"""Module provides function install package"""
 
 with open("requirements.txt", "r", encoding="UTF-8") as f:
     requirements = f.read().splitlines()

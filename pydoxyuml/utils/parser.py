@@ -1,7 +1,7 @@
+"""Module provides all functions to setup an ArgumentParser"""
+
 from argparse import ArgumentParser
 import argparse
-
-"""Module provides all functions to setup an ArgumentParser"""
 
 
 def setup_parser_generate_docs(parser: ArgumentParser) -> ArgumentParser:

@@ -21,7 +21,7 @@ def setup_parser_generate_docs(parser: ArgumentParser) -> ArgumentParser:
     parser.add_argument(
         "--output",
         type=str,
-        help="Path to directory where you want to save your documentation with folders 'html/', 'latex/', ...",
+        help="Relative path to directory where you want to save your documentation with folders 'html/', 'latex/', ...",
         required=True,
     )
     parser.add_argument(
@@ -61,7 +61,7 @@ def setup_parser_generate_uml(parser: ArgumentParser) -> ArgumentParser:
         "--output",
         type=str,
         default="uml",
-        help="Path to directory where you want to save your documentation with folder 'uml/'",
+        help="Relative path to directory where you want to save your documentation with folder 'uml/'",
     )
     parser.add_argument(
         "--recursion-depth",

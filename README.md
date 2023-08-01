@@ -31,6 +31,15 @@ Before installing PyDoxyUML, make sure you have the following system-level packa
 
 ### PyDoxyUML Package
 
+You can install the PyDoxyUML package by cloning this repository and calling:
+
+```bash
+pip install .
+```
+
+inside the repository root directory.
+
+TODO:
 You can install the PyDoxyUML package using `pip`, the Python package manager:
 
 ```bash

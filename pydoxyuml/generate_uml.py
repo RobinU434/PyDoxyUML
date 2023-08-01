@@ -123,7 +123,6 @@ class UMLDocumenter(Documenter):
         recursion_depth: int = 1,
     ) -> None:
         super().__init__(input, output)
-        self._output += "uml"
         self._local_dir_filter = LocalImportFilter()
         self._format = format
         self._colorized = colorized

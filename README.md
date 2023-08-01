@@ -39,6 +39,87 @@ pip install pydoxyuml
 
 ## Usage
 
+### Documenting Python Code with Docstrings (Google Template)
+
+PyDoxyUML utilizes Python docstrings to automatically generate Doxygen-style documentation. Following the Google docstring template is a widely used convention to document Python code. Here's a brief explanation of the Google docstring template:
+
+#### Function Docstring:
+
+```python
+def function_name(param1, param2):
+    """One-line summary of the function.
+
+    A longer, more detailed description of the function if necessary.
+
+    Args:
+        param1 (type): Description of param1.
+        param2 (type): Description of param2.
+
+    Returns:
+        return_type: Description of the return value.
+
+    Raises:
+        ExceptionType: Description of when this exception is raised (if applicable).
+
+    Examples:
+        Provide examples of how to use the function.
+    """
+    # Function implementation here
+    return something
+```
+
+Class Docstring:
+
+```python
+class MyClass:
+    """One-line summary of the class.
+
+    A longer, more detailed description of the class if necessary.
+
+    Attributes:
+        attribute1 (type): Description of attribute1.
+        attribute2 (type): Description of attribute2.
+
+    Methods:
+        method1: Description of method1.
+        method2: Description of method2.
+    """
+    # Class implementation here
+```
+
+Module Docstring:
+
+```python
+"""One-line summary of the module.
+
+A longer, more detailed description of the module if necessary.
+
+This module provides functionality for ...
+"""
+# Module implementation here
+```
+
+Make sure to document your functions, classes, and modules using this docstring format. PyDoxyUML will extract the relevant information from these docstrings to generate the Doxygen-style documentation.
+
+For documenting formulas as latex code use:
+
+For block equations:
+
+```python
+\f[
+   \frac{1}{2}
+\f]
+```
+
+For inline term
+
+```python
+\f$\frac{1}{2}\f$
+```
+
+
+
+
 ### Generating Doxygen-style Documentation
 
 To generate Doxygen-style documentation for your Python code, simply run the following command:

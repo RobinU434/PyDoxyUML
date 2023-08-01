@@ -43,7 +43,7 @@ class DoxyDocumenter(Documenter):
 
         self._alter_doxyfile()
         self._generate_documentation()
-        # self._cleanup()
+        self._cleanup()
 
     def _load_doxyfile(self, doxyfile: Union[None, str]) -> List[str]:
         """loads Doxyfile form filesystem as txt file
@@ -106,7 +106,6 @@ class DoxyDocumenter(Documenter):
         title_str = "PROJECT_NAME           = Example Project"
         input_str = "INPUT                  ="
         output_str = "OUTPUT_DIRECTORY       ="
-        # TODO: insert HTML Style sheet
         html_style_sheet_str = "HTML_EXTRA_STYLESHEET  ="
         index_to_remove = []
         for line_idx in range(len(self._doxyfile)):
@@ -126,7 +125,6 @@ class DoxyDocumenter(Documenter):
                 logging.debug("altered title")
             elif (
                 output_str in self._doxyfile[line_idx]
-                and output_str not in self._doxyfile[line_idx]
             ):
                 self._doxyfile[line_idx] = self._add_doxy_content(
                     self._doxyfile[line_idx], f" {self._output}"

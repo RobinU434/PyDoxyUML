@@ -35,7 +35,13 @@ For visualization you will need graphviz
    sudo apt install python3-doxypypy
    ```
 
-3. **TexLive**: (Optional) Install TexLive for latex generated output
+3. **pyreverse**: `pyreverse` is a tool which comes with `pylint` and creates UML diagrams. Install it using `apt`:
+
+   ```bash
+   sudo apt install pylint
+   ```
+
+4. **TexLive**: (Optional) Install TexLive for latex generated output
 
     ```bash
     sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra

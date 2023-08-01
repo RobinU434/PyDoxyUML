@@ -6,7 +6,7 @@ PyDoxyUML is a Python package that collects Python code documentation (in google
 
 - Automatic generation of Doxygen-style documentation from Python docstrings.
 - Extracts code documentation and UML diagram generation in a single package.
-- Supports popular UML diagram types, such as class diagrams, sequence diagrams, and more.
+- Supports popular UML diagram formats: "png", "jpg", "puml", "plantuml", "dot", "gv", "mmd", "html".
 - Easy integration with your existing Python projects.
 - Command-line interface for seamless usage from the shell.
 

@@ -103,7 +103,7 @@ class DoxyDocumenter(Documenter):
         - INPUT
         - OUTPUT_DIRECTORY
         """
-        title_str = "PROJECT_NAME           = Example Project"
+        title_str = "PROJECT_NAME           ="
         input_str = "INPUT                  ="
         output_str = "OUTPUT_DIRECTORY       ="
         html_style_sheet_str = "HTML_EXTRA_STYLESHEET  ="
@@ -117,11 +117,13 @@ class DoxyDocumenter(Documenter):
                 self._doxyfile[line_idx] = self._add_doxy_content(
                     self._doxyfile[line_idx], f" {self._tmp_dir}"
                 )
-                print(self._doxyfile[line_idx])
                 logging.debug("altered input directory")
             # alter title to custom
             elif title_str in self._doxyfile[line_idx]:
-                self._doxyfile[line_idx].replace("Example Project", self._title)
+                title_line = self._doxyfile[line_idx]
+                title_line = title_line.split("=")[0]
+                title_line = self._add_doxy_content(title_line+"=", self._title)
+                self._doxyfile[line_idx] = title_line
                 logging.debug("altered title")
             elif (
                 output_str in self._doxyfile[line_idx]
@@ -137,7 +139,6 @@ class DoxyDocumenter(Documenter):
                     self._doxyfile[line_idx] = self._add_doxy_content(
                         self._doxyfile[line_idx], self._style_sheet_path
                     )
-
         # remove indices
         for index in index_to_remove[::-1]:
             self._doxyfile.pop(index)

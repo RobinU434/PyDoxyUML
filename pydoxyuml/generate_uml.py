@@ -71,7 +71,7 @@ class LocalImportFilter:
     """filter determine if a given directory path is a local directory"""
 
     def __init__(self) -> None:
-        self.local_directories = list(filter(self._is_directory, os.listdir()))
+        self._local_directories = list(filter(self._is_directory, os.listdir()))
         """List[str]: path to local directories"""
 
     def __call__(self, import_str: str) -> bool:
@@ -84,11 +84,11 @@ class LocalImportFilter:
             bool: True if first element of import string is local
         """
         dir = import_str.split(".")[0]
-        return dir in self.local_directories
+        return dir in self._local_directories
 
     def __str__(self) -> str:
         """returns all local directories"""
-        return unpack(self.local_directories)
+        return unpack(self._local_directories)
 
     @staticmethod
     def _is_directory(name: str) -> bool:

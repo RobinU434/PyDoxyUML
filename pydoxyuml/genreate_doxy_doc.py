@@ -15,14 +15,18 @@ class DoxyDocumenter(Documenter):
         self, input: List[str], output: str, doxyfile: str, title: str, style_sheet: str
     ) -> None:
         super().__init__(input, output)
-        self._doxyfile = self._load_doxyfile(doxyfile)
+        self._doxy_path: str = doxyfile
+        """str: path to doxyfile"""
+        self._doxyfile: List[str]
         """List[str]: variable contains content of doxyfile"""
         self._tmp_dir = self._output + "tmp/"
         self._title = title
         self._style_sheet_path = style_sheet
 
     def __call__(self, *args: Any, **kwds: Any) -> Any:
+        # create output directory
         self._create_directory(self._output)
+        self._doxyfile = self._load_doxyfile(self._doxy_path)
         # create tmp/ directory
         self._create_directory(self._tmp_dir)
 
@@ -56,10 +60,15 @@ class DoxyDocumenter(Documenter):
             List[str]: lines from Doxyfile
         """
         if doxyfile is None:
-            path = pkg_resources.resource_filename("pydoxyuml", "Doxyfile")
+            self._generate_doxyfile()
+            path = self._output + "Doxyfile"
         else:
             path = doxyfile
         return self._load_text_file(path)
+    
+    def _generate_doxyfile(self):
+        command = f"doxygen -g {self._output}Doxyfile"
+        self._execute_command(command)
 
     @staticmethod
     def _load_text_file(path: str) -> List[str]:

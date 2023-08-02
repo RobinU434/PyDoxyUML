@@ -10,6 +10,12 @@ PyDoxyUML is a Python package that collects Python code documentation (in google
 - Easy integration with your existing Python projects.
 - Command-line interface for seamless usage from the shell.
 
+## What is Doxygen
+
+[Doxygen](https://www.doxygen.nl/) is a documentation generator tool commonly used in software development. It assists developers in automatically creating comprehensive and structured documentation for their source code. It extracts comments and annotations written in a specific format within the source code, and then processes them to generate documentation in various output formats like HTML, PDF, or XML.
+
+In simpler terms, Doxygen helps developers write comments in their code to describe its purpose, functions, and usage. These comments are organized in a standardized way, allowing Doxygen to parse and analyze them. When the code is processed by Doxygen, it produces well-structured and user-friendly documentation, making it easier for other developers to understand and use the codebase. This documentation can include details about functions, classes, variables, modules, and other elements in the code, enhancing the overall readability and maintainability of the software project.
+
 ## Installation
 
 ### System Requirements

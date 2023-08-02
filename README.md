@@ -160,8 +160,6 @@ pydoxyuml generate-docs --input <paths/to/your/python/files> --output <output/di
 
 Replace `<path/to/your/python/files>` with the paths to your Python source files and `<output/directory>` with the directory where you want the documentation to be generated.
 
-We provide a template [`Doxyfile`](./pydoxyuml/Doxyfile) as a default `Doxyfile`. If you want to create your own `Doxyfile` it is recommended to use the template a start and further employ your own changes.
-
 For polishing your html output you can use repositories like: [doxygen-awesome-css](https://github.com/jothepro/doxygen-awesome-css) and reference to the corresponding style sheet.
 
 ### Generating UML Diagrams

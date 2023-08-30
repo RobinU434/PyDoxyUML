@@ -65,7 +65,7 @@ class DoxyDocumenter(Documenter):
         else:
             path = doxyfile
         return self._load_text_file(path)
-    
+
     def _generate_doxyfile(self):
         command = f"doxygen -g {self._output}Doxyfile"
         self._execute_command(command)
@@ -116,9 +116,10 @@ class DoxyDocumenter(Documenter):
         input_str = "INPUT                  ="
         output_str = "OUTPUT_DIRECTORY       ="
         html_style_sheet_str = "HTML_EXTRA_STYLESHEET  ="
+        recursive_str = "RECURSIVE              ="
         index_to_remove = []
         for line_idx in range(len(self._doxyfile)):
-            # alter title
+            # alter input directory
             if (
                 input_str in self._doxyfile[line_idx]
                 and self._tmp_dir not in self._doxyfile[line_idx]
@@ -131,16 +132,16 @@ class DoxyDocumenter(Documenter):
             elif title_str in self._doxyfile[line_idx]:
                 title_line = self._doxyfile[line_idx]
                 title_line = title_line.split("=")[0]
-                title_line = self._add_doxy_content(title_line+"=", self._title)
+                title_line = self._add_doxy_content(title_line + "=", self._title)
                 self._doxyfile[line_idx] = title_line
                 logging.debug("altered title")
-            elif (
-                output_str in self._doxyfile[line_idx]
-            ):
+            # alter output_directory
+            elif output_str in self._doxyfile[line_idx]:
                 self._doxyfile[line_idx] = self._add_doxy_content(
                     self._doxyfile[line_idx], f" {self._output}"
                 )
                 logging.debug("altered output directory")
+            # alter html style sheed
             elif html_style_sheet_str in self._doxyfile[line_idx]:
                 if self._style_sheet_path is None:
                     index_to_remove.append(line_idx)
@@ -148,6 +149,12 @@ class DoxyDocumenter(Documenter):
                     self._doxyfile[line_idx] = self._add_doxy_content(
                         self._doxyfile[line_idx], self._style_sheet_path
                     )
+            # alter recursive state
+            elif recursive_str in self._doxyfile[line_idx]:
+                self._doxyfile[line_idx] = self._replace_doxy_content(
+                    self._doxyfile[line_idx], "YES"
+                )
+
         # remove indices
         for index in index_to_remove[::-1]:
             self._doxyfile.pop(index)
@@ -168,6 +175,22 @@ class DoxyDocumenter(Documenter):
         line = line.rstrip("\n")
         line += f" {content}"
         line += "\n"
+        return line
+
+    @staticmethod
+    def _replace_doxy_content(line: str, content: str) -> str:
+        """method will replace everythin on right side of "=" and put content into
+
+        Args:
+            line (str): line to alter
+            content (str): content to put on the right sight of "="
+
+        Returns:
+            str: altered line
+        """
+        line = line.rstrip("\n")
+        key = line.split("=")[0]
+        line = key + "= " + content + "\n"
         return line
 
     def _generate_documentation(self):
